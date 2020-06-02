@@ -96,10 +96,10 @@ if (require.main === module) { // if main prog.
     let validation = false;
     cliargs
         .version(pjson.version)
-        .requiredOption('--input-filename <filename>', 'filename for input MIDI file')
-        .requiredOption('--sample-name <name>', 'name of the sample being uploaded')
-        .option('--model-id <id>', 'the model ID to generate against', 'genre-rock-1')
-        .option('--output-filename <filename>', 'filename for output MIDI file')
+        .requiredOption('-i, --input-filename <filename>', 'filename for input MIDI file')
+        .requiredOption('-n, --sample-name <name>', 'name of the sample being uploaded')
+        .option('-m, --model-id <id>', 'the model ID to generate against', 'genre-rock-1')
+        .option('-o, --output-filename <filename>', 'filename for output MIDI file')
         .action(async (opts) => {
             await uploadSampleToDeepComposer(opts);
         });
