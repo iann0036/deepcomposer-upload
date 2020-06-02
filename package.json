@@ -1,0 +1,28 @@
+{
+  "name": "deepcomposer-upload",
+  "version": "0.1.0",
+  "description": "Upload a single-track MIDI to the AWS DeepComposer service",
+  "keywords": [
+    "aws",
+    "deepcomposer",
+    "piano",
+    "music",
+    "aws-sdk"
+  ],
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ian Mckay",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.687.0",
+    "commander": "^5.1.0",
+    "file-api": "^0.10.4",
+    "filereader": "^0.10.3",
+    "midi-file": "^1.1.2",
+    "node-mime": "^1.0.0",
+    "request": "^2.88.2"
+  },
+  "bin": "./main.js"
+}
