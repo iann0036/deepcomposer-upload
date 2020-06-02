@@ -1,5 +1,7 @@
 # deepcomposer-upload
 
+<span class="badge-npmversion"><a href="https://npmjs.org/package/deepcomposer-upload" title="View this project on NPM"><img src="https://img.shields.io/npm/v/deepcomposer-upload.svg" alt="NPM version" /></a></span>
+
 > Upload a single-track MIDI to the AWS DeepComposer service
 
 ## Installation
@@ -30,11 +32,11 @@ The ID of the model used to generate new tracks, defaults to `genre-rock-1`
 
 Default options are:
 
-* genre-rock-1
-* genre-pop-1
-* genre-jazz-1
-* genre-joco-1
-* genre-symphony-1
+* `genre-rock-1`
+* `genre-pop-1`
+* `genre-jazz-1`
+* `genre-joco-1`
+* `genre-symphony-1`
 
 #### -o, --output-filename
 
