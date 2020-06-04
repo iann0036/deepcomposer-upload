@@ -61,19 +61,23 @@ The name of the output filename of the generated MIDI file, if you wish to save 
 #### --max-percentage-removed
 
 _Autoregressive only_
+
 The maximum percentage of initial notes removed (0-100)
 
 #### --max-notes-added
 
 _Autoregressive only_
+
 The maximum notes to be added (50-1000)
 
 #### --sampling-iterations
 
 _Autoregressive only_
+
 The sampling iterations (0-100)
 
 #### --creative-risk
 
 _Autoregressive only_
+
 As risk increases, compositions will become more experimental (0.5-6)
