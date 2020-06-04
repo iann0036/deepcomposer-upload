@@ -1,6 +1,6 @@
 {
   "name": "deepcomposer-upload",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Upload a single-track MIDI to the AWS DeepComposer service",
   "keywords": [
     "aws",

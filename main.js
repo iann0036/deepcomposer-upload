@@ -46,6 +46,21 @@ function uploadSampleToDeepComposer(cliopts) {
         ];
 
         let inputMidiB64 = Buffer.from(writeMidi(midiFile)).toString('base64');
+        let jsonBody = {
+            'inputMidi': inputMidiB64,
+            'modelId': cliopts.modelId,
+            'name': cliopts.sampleName,
+            'modelType': 'SAMPLE',
+            'inputMidiSource': 'VIRTUAL'
+        };
+        if (cliopts.maxPercentageRemoved && cliopts.maxNotesAdded && cliopts.samplingIterations && cliopts.creativeRisk) {
+            jsonBody['inferenceHyperParameters'] = {
+                "maxPercentageOfInitialNotesRemoved": parseInt(cliopts.maxPercentageRemoved),
+                "maxNotesAdded": parseInt(cliopts.maxNotesAdded),
+                "samplingIterations": parseInt(cliopts.samplingIterations),
+                "temperature": parseFloat(cliopts.creativeRisk)
+            };
+        }
         let awsreq = aws4.sign({
             service: 'deepcomposer',
             region: 'us-east-1',
@@ -55,13 +70,7 @@ function uploadSampleToDeepComposer(cliopts) {
                 'Content-Type': 'application/x-amz-json-1.1',
                 'X-Amz-Target': 'DeepComposer.CreateComposition'
             },
-            body: JSON.stringify({
-                'inputMidi': inputMidiB64,
-                'modelId': cliopts.modelId,
-                'name': cliopts.sampleName,
-                'modelType': 'SAMPLE',
-                'inputMidiSource': 'VIRTUAL'
-            })
+            body: JSON.stringify(jsonBody)
         }, {
             secretAccessKey: awscreds.secretAccessKey,
             accessKeyId: awscreds.accessKeyId
@@ -102,6 +111,10 @@ if (require.main === module) { // if main prog.
         .requiredOption('-n, --sample-name <name>', 'name of the sample being uploaded')
         .option('-m, --model-id <id>', 'the model ID to generate against', 'genre-rock-1')
         .option('-o, --output-filename <filename>', 'filename for output MIDI file')
+        .option('--max-percentage-removed <number>', 'the maximum percentage of initial notes removed (0-100) (autoregressive only)')
+        .option('--max-notes-added <number>', 'the maximum notes to be added (50-1000) (autoregressive only)')
+        .option('--sampling-iterations <number>', 'the sampling iterations (0-100) (autoregressive only)')
+        .option('--creative-risk <number>', 'the creative risk factor (0.5-6) (autoregressive only)')
         .action(async (opts) => {
             await uploadSampleToDeepComposer(opts);
         });
