@@ -16,12 +16,30 @@ function uploadSampleToDeepComposer(cliopts) {
     chain.resolve((err, awscreds) => {
         let midiFile = parseMidi(inputFh);
         let tempo = 600000;
+        let deltaCumulative = 0;
+        midiFile.tracks.forEach(track => {
+            track.forEach(action => {
+                if (action.type == 'setTempo') {
+                    tempo = action.microsecondsPerBeat;
+                }
+            });
+        });
         let filteredactions = midiFile.tracks.pop().filter(action => {
             if (action.type == 'setTempo') {
                 tempo = action.microsecondsPerBeat;
             }
-            return ['noteOn', 'noteOff', 'endOfTrack'].includes(action.type);
+            if (['noteOn', 'noteOff', 'endOfTrack'].includes(action.type) && deltaCumulative < midiFile.header.ticksPerBeat * 31) {
+                if (action.deltaTime) {
+                    deltaCumulative += action.deltaTime;
+                }
+                return true;
+            }
+            return false;
         });
+
+        console.log("Tempo: " + tempo);
+        console.log("Ticks per beat: " + midiFile.header.ticksPerBeat);
+        console.log("Cumulative delta time: " + deltaCumulative);
 
         midiFile.header = {
             'format': 1,
