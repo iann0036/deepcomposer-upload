@@ -17,6 +17,35 @@ function uploadSampleToDeepComposer(cliopts) {
         let midiFile = parseMidi(inputFh);
         let tempo = 600000;
         let deltaCumulative = 0;
+        let primaryTrack = midiFile.tracks[midiFile.tracks.length - 1]; // default last track
+
+        if (cliopts.trackNumber) {
+            primaryTrack = midiFile.tracks[cliopts.trackNumber - 1];
+        }
+
+        if (cliopts.listTracks) {
+            let trackNumber = 0;
+            let trackName = "";
+
+            midiFile.tracks.forEach(track => {
+                trackNumber += 1;
+                trackName = "";
+
+                track.forEach(action => {
+                    if (action.type == 'trackName') {
+                        trackName = action.text;
+                    }
+                });
+                console.log(trackNumber + ": " + trackName);
+            });
+            return;
+        }
+
+        if (!cliopts.sampleName) {
+            console.log("Sample name not specified");
+            return;
+        }
+
         midiFile.tracks.forEach(track => {
             track.forEach(action => {
                 if (action.type == 'setTempo') {
@@ -24,15 +53,17 @@ function uploadSampleToDeepComposer(cliopts) {
                 }
             });
         });
-        let filteredactions = midiFile.tracks.pop().filter(action => {
+        let filteredactions = primaryTrack.filter(action => {
             if (action.type == 'setTempo') {
                 tempo = action.microsecondsPerBeat;
             }
-            if (['noteOn', 'noteOff', 'endOfTrack'].includes(action.type) && deltaCumulative < midiFile.header.ticksPerBeat * 31) {
+            if (['noteOn', 'noteOff', 'endOfTrack'].includes(action.type)) {
                 if (action.deltaTime) {
                     deltaCumulative += action.deltaTime;
                 }
-                return true;
+                if (deltaCumulative < midiFile.header.ticksPerBeat * 32) {
+                    return true;
+                }
             }
             return false;
         });
@@ -126,13 +157,15 @@ if (require.main === module) { // if main prog.
     cliargs
         .version(pjson.version)
         .requiredOption('-i, --input-filename <filename>', 'filename for input MIDI file')
-        .requiredOption('-n, --sample-name <name>', 'name of the sample being uploaded')
+        .option('-n, --sample-name <name>', 'name of the sample being uploaded')
         .option('-m, --model-id <id>', 'the model ID to generate against', 'genre-rock-1')
         .option('-o, --output-filename <filename>', 'filename for output MIDI file')
         .option('--max-percentage-removed <number>', 'the maximum percentage of initial notes removed (0-100) (autoregressive only)')
         .option('--max-notes-added <number>', 'the maximum notes to be added (50-1000) (autoregressive only)')
         .option('--sampling-iterations <number>', 'the sampling iterations (0-100) (autoregressive only)')
         .option('--creative-risk <number>', 'the creative risk factor (0.5-6) (autoregressive only)')
+        .option('--list-tracks', 'list track names instead of uploading')
+        .option('--track-number <number>', 'which track number to use (defaults to last track)')
         .action(async (opts) => {
             await uploadSampleToDeepComposer(opts);
         });

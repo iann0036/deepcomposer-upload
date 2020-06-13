@@ -30,15 +30,15 @@ deepcomposer-upload \
   --creative-risk 1.5
 ```
 
-#### -i, --input-filename (Required)
+#### -i, --input-filename <filename> (Required)
 
 The filename of the input MIDI file
 
-#### -n, --sample-name (Required)
+#### -n, --sample-name <name>
 
-The name of the sample, used to register in Music studio
+The name of the sample, used to register in Music studio (required when uploading)
 
-#### -m, --model-id
+#### -m, --model-id <id>
 
 The ID of the model used to generate new tracks, defaults to `genre-rock-1`
 
@@ -54,30 +54,38 @@ The ID of the model used to generate new tracks, defaults to `genre-rock-1`
 
 * `ar-cnn-bach`
 
-#### -o, --output-filename
+#### -o, --output-filename <filename> 
 
 The name of the output filename of the generated MIDI file, if you wish to save it
 
-#### --max-percentage-removed
+#### --max-percentage-removed <number>
 
 _Autoregressive only_
 
 The maximum percentage of initial notes removed (0-100)
 
-#### --max-notes-added
+#### --max-notes-added <number>
 
 _Autoregressive only_
 
 The maximum notes to be added (50-1000)
 
-#### --sampling-iterations
+#### --sampling-iterations <number>
 
 _Autoregressive only_
 
 The sampling iterations (0-100)
 
-#### --creative-risk
+#### --creative-risk <number>
 
 _Autoregressive only_
 
 As risk increases, compositions will become more experimental (0.5-6)
+
+#### --list-tracks
+
+Lists tracks in the input MIDI file, and ignores uploading to the DeepComposer service
+
+#### --track-number <number>
+
+Selects the track number to process, as shown by `--list-tracks`
