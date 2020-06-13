@@ -12,7 +12,7 @@ npm i -g deepcomposer-upload
 
 ## Usage
 
-Input MIDI files should have a single track and 8 bars or less, tempo should remain static.
+Input MIDI files should have a tempo that remains static. Only the first 8 bars will be processed.
 
 ```
 deepcomposer-upload -i input.mid -n nameoftrack -m genre-rock-1 -o output.mid
